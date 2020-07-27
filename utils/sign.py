@@ -1,11 +1,9 @@
-from django.shortcuts import render
 
-# Create your views here.
 import rsa
 import base64
 
 # 随机成一对密钥，然后保存.pem格式文件,也可以直接使用
-(pubkey, privkey) = rsa.newkeys(1000)
+(pubkey, privkey) = rsa.newkeys(1024)
 (pubkey2, privkey2) = rsa.newkeys(1024)
 pub = pubkey.save_pkcs1()
 print(pub.decode())
@@ -39,8 +37,11 @@ crypto = base64.b64encode(rsa.encrypt(message.encode(), pubkey))
 print(rsa.encrypt(message.encode(), pubkey))
 print("rsa加密结果:", crypto)
 # 私钥解密
-
-message = rsa.decrypt(base64.b64decode(crypto), privkey)
+from rsa.pkcs1 import DecryptionError
+try:
+    message = rsa.decrypt(base64.b64decode(crypto), privkey2)
+except DecryptionError as e:
+    print("签名认证失败")
 print("rsa解密结果:", message)
 
 
@@ -50,11 +51,11 @@ print("rsa解密结果:", message)
 
 
 # sign 用私钥签名
-signature = base64.b64encode(rsa.sign(message, privkey, 'SHA-1'))
-print("加签结果:", signature)
-# 再用公钥验证签名
-res = rsa.verify(message, base64.b64decode(signature), pubkey)
-print("验签结果:", res)
-
+# signature = base64.b64encode(rsa.sign(message, privkey, 'SHA-1'))
+# print("加签结果:", signature)
+# # 再用公钥验证签名
+# res = rsa.verify(message, base64.b64decode(signature), pubkey)
+# print("验签结果:", res)
+#
 
 from alipay import AliPay

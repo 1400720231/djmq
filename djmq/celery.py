@@ -62,6 +62,10 @@ flower -A djmq.celery -l info
                 'delivery_tag': '2f6920e5-3da0-4c4c-abb3-9dc505b96c57',
                 'priority': 0,
                 'reply_to': 'b9d227ed-16df-3ebf-8a8d-e74dc8f9d9ed'}}
+                
+                
+                
+                
 如果配置了自己的routes 任务的分配的队列就会变化，也就是redis的list的key会变化
 {'body': 'W1tdLCB7fSwgeyJjYWxsYmFja3MiOiBudWxsLCAiZXJyYmFja3MiOiBudWxsLCAiY2hhaW4iOiBudWxsLCAiY2hvcmQiOiBudWxsfV0=',
  'content-encoding': 'utf-8',
