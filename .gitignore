@@ -1,0 +1,12 @@
+celerybeat-schedule
+db.sqlite3
+*.DS_Store
+*.pyc
+__pycache__/
+.ideas
+.ideas/*
+.idea
+.idea/*
+staticfiles
+migrations/*
+# .env

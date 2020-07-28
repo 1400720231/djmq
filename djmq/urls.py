@@ -1,19 +1,20 @@
+# 内置包
+
+# 三方包
 from django.contrib import admin
 from django.urls import path
-from django.views.generic.base import View
-from django.shortcuts import HttpResponse
-from user.tasks import testfunc
+from django.conf import settings
 
 
-class IndexView(View):
-    def get(self, request):
-        res = testfunc.delay() # 调用delay函数把任务放入celery
-        print(res)
-        print()
-        return HttpResponse({"status": "success", "message": "首页访问成功"})
+# 自定义公共组件
 
+
+# 业务代码
+from apps.user import views as user_views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('index', IndexView.as_view(), name='index')
+    # 所以api接口
+    path('task',user_views.TaskView.as_view(), name='task')
+
 ]
