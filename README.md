@@ -11,6 +11,22 @@ mysql或者psql
 redis
 ```
 >其中redis 0库作为中间broker，是否有其他项目在用0库
+
+# 配置数据库
+```shell script
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': '',
+        'USER': '',
+        'PASSWORD': '',
+        'HOST': '',
+        'PORT': ,
+        'CONN_MAX_AGE': 100,  # 最长链接时间，具体需要dba测试，没有标准
+    }
+}
+
+```
 # 安装nginx,具体配置文件见deploy文件夹
 ```shell script
 

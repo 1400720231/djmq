@@ -66,18 +66,18 @@ WSGI_APPLICATION = 'djmq.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/2.0/ref/settings/#databases
 
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'djmq',
-        'USER': 'root',
+        'USER': 'dbuser',
         'PASSWORD': 'python',
         'HOST': 'localhost',
-        'PORT': 3306,
+        'PORT': 5432,
         'CONN_MAX_AGE': 100,  # 最长链接时间，具体需要dba测试，没有标准
     }
 }
-
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
