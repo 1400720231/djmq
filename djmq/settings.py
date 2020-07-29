@@ -1,6 +1,5 @@
 import os
 import sys
-import datetime
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -8,16 +7,13 @@ sys.path.insert(0, os.path.join(BASE_DIR, 'common/'))
 sys.path.insert(0, os.path.join(BASE_DIR, 'apps/'))
 sys.path.insert(0, os.path.join(BASE_DIR, 'utils/'))
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/2.0/howto/deployment/checklist/
-
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'cc$r)t8$x=ry3w(gpw4nr@n466@^)xns&t49&($gl&62gmd#&e'
 
-# SECURITY WARNING: don't run with debug turned on in production!
+# RT WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"] if DEBUG else ['*']
 
 # Application definition
 
@@ -31,9 +27,9 @@ INSTALLED_APPS = [
     'django_celery_results',  # celery异步任务结果
     'django_celery_beat',  # celery定时任务结果
     'rest_framework',
-    'corsheaders'
+    'corsheaders',
+    'djorm_pool'
 ]
-from django.middleware.common import CommonMiddleware
 
 MIDDLEWARE = [
     'common.middleware.CheckSignMiddleware',
@@ -78,10 +74,9 @@ DATABASES = {
         'PASSWORD': 'python',
         'HOST': 'localhost',
         'PORT': 3306,
+        'CONN_MAX_AGE': 100,  # 最长链接时间，具体需要dba测试，没有标准
     }
 }
-# Password validation
-# https://docs.djangoproject.com/en/2.0/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -97,16 +92,18 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
-
+# 时区设置
 LANGUAGE_CODE = 'zh-Hans'
 TIME_ZONE = 'Asia/Shanghai'  # 上海时区
 USE_I18N = True
 USE_L10N = True
 USE_TZ = False
 STATIC_URL = '/static/'
-
+# pro环境下手机静态文件
+if not DEBUG:
+    STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 # celery 基本配置
-CELERY_BROKER_URL = 'redis://127.0.0.1:6379/0'  # celery中间键(broker)
+CELERY_BROKER_URL = 'redis://127.0.0.1:6379/0'  # celery消息中间键(broker)
 # CELERY_RESULT_BACKEND = 'redis://127.0.0.1:6379/1'  # celery结果返回，可用于跟踪结果
 CELERY_RESULT_BACKEND = 'django-db'  # celery执行结果保存在db中
 CELERY_ACCEPT_CONTENT = ['application/json', ]  # celery内容等消息的格式设置
@@ -114,11 +111,11 @@ CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
 CELERY_TIMEZONE = 'Asia/Shanghai'  # celery时区设置，使用settings中TIME_ZONE同样的时区
 
+# 　签名token相关配置
 API_TOKEN_URL = "redis://127.0.0.1:6379/1"  # token保存地址
-
 API_TOKEN_EXPIRE = 60  # token有效期，默认60s
 
-# DRF
+# drf认证相关配置
 REST_FRAMEWORK = {
     # 　认证方式
     'DEFAULT_AUTHENTICATION_CLASSES': (
@@ -165,3 +162,10 @@ CORS_ALLOW_HEADERS = (
     'x-requested-with',
     'Pragma',
 )
+
+# 基于djorm_pool包的django连接池配置 https://github.com/djangonauts/djorm-ext-pool
+DJORM_POOL_OPTIONS = {
+    "pool_size": 20,  # 连接池
+    "max_overflow": 0,  # 最大连接数
+    "recycle": 3600
+}
