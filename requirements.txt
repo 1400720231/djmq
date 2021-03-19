@@ -17,7 +17,7 @@ django-cors-headers==3.4.0
 django-db-pooling==0.0.4
 django-filter==2.3.0
 django-timezone-field==4.0
-djangorestframework==3.11.0
+djangorestframework==3.11.2
 djorm-ext-pool==0.8.2
 flower==0.9.5
 future==0.18.2
