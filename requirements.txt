@@ -19,7 +19,7 @@ django-filter==2.3.0
 django-timezone-field==4.0
 djangorestframework==3.11.0
 djorm-ext-pool==0.8.2
-flower==0.9.5
+flower==1.2.0
 future==0.18.2
 gevent==20.6.2
 greenlet==0.4.16
